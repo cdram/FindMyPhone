@@ -72,9 +72,6 @@ public class FindMyPhoneSpeechlet implements Speechlet {
         if ("HelloWorldIntent".equals(intentName)) {
             return getHelloResponse();
         }
-        else if ("FinderIntent".equals(intentName)) {
-            return makeAnOutgoingCall();
-        }
         else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
