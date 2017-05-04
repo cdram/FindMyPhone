@@ -26,6 +26,9 @@ import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
+import com.twilio.http.HttpClient;
+import com.twilio.http.Request;
+import com.twilio.http.Response;
 import com.twilio.http.TwilioRestClient;
 import com.twilio.rest.api.v2010.account.Call;
 import com.twilio.type.PhoneNumber;
@@ -39,6 +42,7 @@ public class FindMyPhoneSpeechlet implements Speechlet {
     private static final String MY_TWILIO_NUMER = "";
     private static final String ACCOUNT_SID = "";
     private static final String AUTH_TOKEN = "";
+    private static final String TWILIO_CALL_BACK = "http://demo.twilio.com/welcome/voice/";
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -67,6 +71,9 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         if ("HelloWorldIntent".equals(intentName)) {
             return getHelloResponse();
+        }
+        else if ("FinderIntent".equals(intentName)) {
+            return makeAnOutgoingCall();
         }
         else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
@@ -149,7 +156,7 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         PhoneNumber to = new PhoneNumber(MY_PHONE_NUMER); // Replace with your phone number
         PhoneNumber from = new PhoneNumber(MY_TWILIO_NUMER); // Replace with a Twilio number
-        URI uri = URI.create("http://demo.twilio.com/welcome/voice/");
+        URI uri = URI.create(TWILIO_CALL_BACK);
 
         // Make the call
         Call call = Call.creator(to, from, uri).create(client);
