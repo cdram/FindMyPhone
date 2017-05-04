@@ -9,6 +9,8 @@
  */
 package findmyphone;
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +26,19 @@ import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
+import com.twilio.http.TwilioRestClient;
+import com.twilio.rest.api.v2010.account.Call;
+import com.twilio.type.PhoneNumber;
 
 /**
  * This sample shows how to create a simple speechlet for handling speechlet requests.
  */
 public class FindMyPhoneSpeechlet implements Speechlet {
     private static final Logger log = LoggerFactory.getLogger(FindMyPhoneSpeechlet.class);
+    private static final String MY_PHONE_NUMER = "";
+    private static final String MY_TWILIO_NUMER = "";
+    private static final String ACCOUNT_SID = "";
+    private static final String AUTH_TOKEN = "";
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -58,7 +67,8 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         if ("HelloWorldIntent".equals(intentName)) {
             return getHelloResponse();
-        } else if ("AMAZON.HelpIntent".equals(intentName)) {
+        }
+        else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
@@ -79,11 +89,11 @@ public class FindMyPhoneSpeechlet implements Speechlet {
      * @return SpeechletResponse spoken and visual response for the given intent
      */
     private SpeechletResponse getWelcomeResponse() {
-        String speechText = "Welcome to the Alexa Skills Kit, you can say hello";
+        String speechText = "Hello am Sherlock, am your personal detective!";
 
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
-        card.setTitle("HelloWorld");
+        card.setTitle("Sherlock");
         card.setContent(speechText);
 
         // Create the plain text output.
@@ -107,12 +117,44 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
-        card.setTitle("HelloWorld");
+        card.setTitle("Sherlock");
         card.setContent(speechText);
 
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech, card);
+    }
+
+
+    /**
+     * Creates a {@code SpeechletResponse} for the making a call Intent
+     *
+     * @return SpeechletResponse spoken and visual response for the given intent
+     */
+    private SpeechletResponse makeAnOutgoingCall() {
+        String speechText = "Sherlock is trying to call your phone " + MY_PHONE_NUMER;
+
+        // Create the Simple card content.
+        SimpleCard card = new SimpleCard();
+        card.setTitle("Calling " + MY_PHONE_NUMER);
+        card.setContent(speechText);
+
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        TwilioRestClient client = new TwilioRestClient.Builder(ACCOUNT_SID, AUTH_TOKEN).build();
+
+        PhoneNumber to = new PhoneNumber(MY_PHONE_NUMER); // Replace with your phone number
+        PhoneNumber from = new PhoneNumber(MY_TWILIO_NUMER); // Replace with a Twilio number
+        URI uri = URI.create("http://demo.twilio.com/welcome/voice/");
+
+        // Make the call
+        Call call = Call.creator(to, from, uri).create(client);
+        // Print the call SID (a 32 digit hex like CA123..)
+        log.debug(call.getSid());
 
         return SpeechletResponse.newTellResponse(speech, card);
     }
@@ -123,11 +165,11 @@ public class FindMyPhoneSpeechlet implements Speechlet {
      * @return SpeechletResponse spoken and visual response for the given intent
      */
     private SpeechletResponse getHelpResponse() {
-        String speechText = "You can say hello to me!";
+        String speechText = "You can ask me to find your phone or your life!";
 
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
-        card.setTitle("HelloWorld");
+        card.setTitle("Sherlock");
         card.setContent(speechText);
 
         // Create the plain text output.
