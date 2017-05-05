@@ -24,11 +24,11 @@ import com.amazon.speech.speechlet.lambda.SpeechletRequestStreamHandler;
 public final class FindMyPhoneSpeechletRequestStreamHandler extends SpeechletRequestStreamHandler {
     private static final Set<String> supportedApplicationIds = new HashSet<String>();
     static {
-        /*
+        /* TO BE NOTED :
          * This Id can be found on https://developer.amazon.com/edw/home.html#/ "Edit" the relevant
          * Alexa Skill and put the relevant Application Ids in this Set.
          */
-        supportedApplicationIds.add("amzn1.ask.skill.[your-app-id]");
+        supportedApplicationIds.add("amzn1.ask.skill.[your-skill-id]");
     }
 
     public FindMyPhoneSpeechletRequestStreamHandler() {

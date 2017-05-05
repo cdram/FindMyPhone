@@ -38,10 +38,14 @@ import com.twilio.type.PhoneNumber;
  */
 public class FindMyPhoneSpeechlet implements Speechlet {
     private static final Logger log = LoggerFactory.getLogger(FindMyPhoneSpeechlet.class);
+
+    // TO BE NOTED : MUST FILL IN THESE VALUES
     private static final String MY_PHONE_NUMER = "";
     private static final String MY_TWILIO_NUMER = "";
     private static final String ACCOUNT_SID = "";
     private static final String AUTH_TOKEN = "";
+
+    // TO BE NOTED : change this URL to your own AWS API GateWay url, if you end up setting that up
     private static final String TWILIO_CALL_BACK = "http://demo.twilio.com/welcome/voice/";
 
     @Override
@@ -71,6 +75,9 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         if ("HelloWorldIntent".equals(intentName)) {
             return getHelloResponse();
+        }
+        else if ("FinderIntent".equals(intentName)) {
+            return makeAnOutgoingCall();
         }
         else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
@@ -151,13 +158,12 @@ public class FindMyPhoneSpeechlet implements Speechlet {
 
         TwilioRestClient client = new TwilioRestClient.Builder(ACCOUNT_SID, AUTH_TOKEN).build();
 
-        PhoneNumber to = new PhoneNumber(MY_PHONE_NUMER); // Replace with your phone number
-        PhoneNumber from = new PhoneNumber(MY_TWILIO_NUMER); // Replace with a Twilio number
+        PhoneNumber to = new PhoneNumber(MY_PHONE_NUMER);
+        PhoneNumber from = new PhoneNumber(MY_TWILIO_NUMER);
         URI uri = URI.create(TWILIO_CALL_BACK);
 
         // Make the call
         Call call = Call.creator(to, from, uri).create(client);
-        // Print the call SID (a 32 digit hex like CA123..)
         log.debug(call.getSid());
 
         return SpeechletResponse.newTellResponse(speech, card);

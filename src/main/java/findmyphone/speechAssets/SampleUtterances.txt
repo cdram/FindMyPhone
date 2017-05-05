@@ -5,3 +5,11 @@ HelloWorldIntent say hi
 HelloWorldIntent say hi world
 HelloWorldIntent hi
 HelloWorldIntent how are you
+
+FinderIntent find my phone
+FinderIntent where is my phone
+FinderIntent lost my phone
+FinderIntent miss my phone
+FinderIntent search for my phone
+FinderIntent call my phone
+FinderIntent ring my phone

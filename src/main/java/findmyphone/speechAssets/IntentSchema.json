@@ -4,6 +4,9 @@
       "intent": "HelloWorldIntent"
     },
     {
+      "intent": "FinderIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
